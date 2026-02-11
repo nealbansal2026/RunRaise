@@ -61,9 +61,9 @@ The result should feel like a polished demo or starter template that looks inten
 import React from 'react';
 
 
-
-
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { LineChart, Line, BarChart,
+  Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 
 // Basic CSS styles for dark theme and layout
@@ -142,6 +142,178 @@ const styles = {
   },
 };
 
+const activities = [
+  {
+    id: 1,
+    athlete: 'Neal B.',
+    date: '2026-02-01',
+    type: 'Run',
+    distance: 6.2,
+    pace: '6:45 /mi',
+    elevation: 320,
+  },
+  {
+    id: 2,
+    athlete: 'Arjun K.',
+    date: '2026-02-02',
+    type: 'Tempo Run',
+    distance: 5.0,
+    pace: '6:10 /mi',
+    elevation: 210,
+  },
+  {
+    id: 3,
+    athlete: 'David L.',
+    date: '2026-02-03',
+    type: 'Long Run',
+    distance: 10.5,
+    pace: '7:20 /mi',
+    elevation: 540,
+  },
+  {
+    id: 4,
+    athlete: 'Neal B.',
+    date: '2026-02-05',
+    type: 'Intervals',
+    distance: 4.8,
+    pace: '5:50 /mi',
+    elevation: 180,
+  },
+];
+
+// Helper to get ISO week number
+const getWeekNumber = (dateString) => {
+  const date = new Date(dateString);
+  const firstJan = new Date(date.getFullYear(), 0, 1);
+  const days = Math.floor((date - firstJan) / (24 * 60 * 60 * 1000));
+  return Math.ceil((days + firstJan.getDay() + 1) / 7);
+};
+
+const weeklyMileage = Object.values(
+  activities.reduce((acc, activity) => {
+    const week = getWeekNumber(activity.date);
+    const label = `Week ${week}`;
+
+    if (!acc[label]) {
+      acc[label] = { week: label, miles: 0 };
+    }
+
+    acc[label].miles += activity.distance;
+    return acc;
+  }, {})
+);
+
+//Table component
+
+const ActivityTable = () => (
+  <section style={{ padding: '2rem' }}>
+    <h2>Recent Activities</h2>
+
+    <table style={{
+      width: '100%',
+      borderCollapse: 'collapse',
+      marginTop: '1rem',
+      backgroundColor: '#1e1e1e',
+      borderRadius: '8px',
+      overflow: 'hidden'
+    }}>
+      <thead style={{ backgroundColor: '#222' }}>
+        <tr>
+          {['Athlete', 'Date', 'Type', 'Miles', 'Pace', 'Elevation (ft)'].map((heading) => (
+            <th key={heading} style={tableCell}>{heading}</th>
+          ))}
+        </tr>
+      </thead>
+
+      <tbody>
+        {activities.map((activity, index) => (
+          <tr
+            key={activity.id}
+            style={{
+              backgroundColor: index % 2 === 0 ? '#1a1a1a' : '#161616'
+            }}
+          >
+            <td style={tableCell}>{activity.athlete}</td>
+            <td style={tableCell}>{activity.date}</td>
+            <td style={tableCell}>{activity.type}</td>
+            <td style={tableCell}>{activity.distance}</td>
+            <td style={tableCell}>{activity.pace}</td>
+            <td style={tableCell}>{activity.elevation}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+);
+
+const tableCell = {
+  padding: '0.75rem',
+  textAlign: 'left',
+  borderBottom: '1px solid #333',
+  color: '#E0E0E0',
+};
+
+
+// graph helper
+const mileageByAthlete = Object.values(
+  activities.reduce((acc, activity) => {
+    if (!acc[activity.athlete]) {
+      acc[activity.athlete] = { name: activity.athlete, miles: 0 };
+    }
+    acc[activity.athlete].miles += activity.distance;
+    return acc;
+  }, {})
+);
+
+// mileage graph by week
+const WeeklyMileageGraph = () => (
+  <section style={{ padding: '2rem' }}>
+    <h2>Total Team Miles Per Week</h2>
+
+    <div style={{ width: '100%', height: 300 }}>
+      <ResponsiveContainer>
+        <LineChart data={weeklyMileage}>
+          <CartesianGrid stroke="#333" />
+          <XAxis dataKey="week" stroke="#E0E0E0" />
+          <YAxis stroke="#E0E0E0" />
+          <Tooltip />
+          <Line
+            type="monotone"
+            dataKey="miles"
+            stroke="#2979ff"
+            strokeWidth={3}
+            dot={{ r: 6 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  </section>
+);
+
+
+// Graph component
+const TeamMileageGraph = () => (
+  <section style={{ padding: '2rem' }}>
+    <h2>Total Miles Per Athlete</h2>
+
+    <div style={{ width: '100%', height: 300 }}>
+      <ResponsiveContainer>
+        <BarChart data={mileageByAthlete} barSize={50}>
+          <CartesianGrid stroke="#333" />
+          <XAxis dataKey="name" stroke="#E0E0E0" />
+          <YAxis stroke="#E0E0E0" />
+          <Tooltip />
+          <Bar
+            dataKey="miles"
+            fill="#2979ff"
+            radius={[6, 6, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </section>
+);
+
 
 // Navigation component with client-side routing
 const NavBar = () => (
@@ -151,6 +323,8 @@ const NavBar = () => (
       <Link to="/" style={styles.navLink}>Home</Link>
       <Link to="/about" style={styles.navLink}>About</Link>
       <Link to="/contact" style={styles.navLink}>Contact</Link>
+      <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
+
     </div>
   </nav>
 );
@@ -256,6 +430,16 @@ const App = () => (
               <h2>Contact Us</h2>
               <p>For any inquiries, please contact the app's founder, Neal Bansal at nealbansal100@gmail.com.</p>
             </section>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <ActivityTable />
+              <TeamMileageGraph />
+              <WeeklyMileageGraph />
+            </>
           }
         />
       </Routes>
