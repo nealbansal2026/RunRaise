@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+# RunRaise
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+RunRaise is a web application designed to help Cross Country teams raise funds by showcasing their athletes' running progress. By connecting to Strava, the application retrieves activity data and presents it through an interactive dashboard.
 
-## Available Scripts
+## Features
+### NOTE: STRAVA HAS DISCONTINUED API USE FOR FREE USERS, THUS ENDING RUNRAISE'S API FUNCTIONALITY
+- **Strava Integration:** Connect a Strava account to retrieve athlete profiles and running activities.
+- **Activity Dashboard:** View recent running activities, including distance, pace, date, and elevation.
+- **Team Statistics:** Visualize total team mileage over time and compare mileage between athletes.
+- **Interactive Website:** Navigate between the home page, about page, contact page, and team dashboard.
 
-In the project directory, you can run:
+## Technologies Used
 
-### `npm start`
+- React
+- JavaScript
+- Node.js
+- Express
+- Strava API
+- Recharts
+- Axios
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+- [Node.js](https://nodejs.org/)
+- npm
+- A [Strava API application](https://www.strava.com/settings/api)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+1. Clone the repository:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```bash
+   git clone https://github.com/nealbansal2026/RunRaise-from-coPilot.git
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Navigate to the project directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   cd RunRaise-from-coPilot/runraise
+   ```
 
-### `npm run eject`
+3. Install dependencies:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Configuration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Create a `.env` file in the project directory and add your Strava API credentials:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```env
+STRAVA_CLIENT_ID=your_client_id
+STRAVA_CLIENT_SECRET=your_client_secret
+STRAVA_REDIRECT_URI=http://localhost:5000/callback
+FRONTEND_URL=http://localhost:3000
+```
 
-## Learn More
+### Running the Application
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Start the React frontend:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm start
+```
 
-### Code Splitting
+In a separate terminal, start the Express backend:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm run server
+```
 
-### Analyzing the Bundle Size
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Once the application is running, select **Connect with Strava** to authorize access to your activity data.
 
-### Making a Progressive Web App
+## Future Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Support for multiple athlete accounts.
+- Additional team performance statistics and visualizations.
+- Expanded fundraising and donation functionality.
